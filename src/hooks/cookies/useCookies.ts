@@ -1,10 +1,13 @@
-export const useCookies = (): { access: string; refresh: string } => {
-  const cookieString = document.cookie
+import cookies from "js-cookie"
 
-  const cookieParts = cookieString.split("; ")
+interface IProps {
+  access: string | undefined
+  refresh: string | undefined
+}
 
-  const access = cookieParts[0]
-  const refresh = cookieParts[1]
+export const useCookies = (): IProps => {
+  const access = cookies.get("accessToken")
+  const refresh = cookies.get("refreshToken")
 
   return { access, refresh }
 }

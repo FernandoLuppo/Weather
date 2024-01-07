@@ -1,48 +1,27 @@
 "use client"
 
 import Header from "@/components/Header"
-import { useAuth } from "@/hooks"
-import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { useCallback, useEffect } from "react"
-import { forgotPasswordNewPasswordSchema, justNumbers } from "@/utils"
-import type { SubmitHandler } from "react-hook-form"
-
-interface IHandleSubmit {
-  code: string
-  password: string
-  confirmPassword: string
-}
+import { useNewPassword, useNewPasswordValidateToken } from "@/hooks"
+import { useEffect } from "react"
+import { justNumbers } from "@/utils"
+import { useRouter } from "next/navigation"
 
 export default function NewPassword({
   params
 }: {
-  params: { token: string }
+  params: { emailToken: string }
 }): JSX.Element {
-  useEffect(() => {
-    const validateToken = async (): Promise<void> => {
-      console.log(params)
-      await useAuth({
-        data: params,
-        url: "/recover-password/validate-email-token",
-        method: "POST"
-      })
-    }
-    void validateToken()
-  }, [])
+  const router = useRouter()
 
-  const { register, handleSubmit, formState, reset, watch, setValue } = useForm(
-    {
-      mode: "all",
-      resolver: yupResolver(forgotPasswordNewPasswordSchema),
-      defaultValues: {
-        code: "",
-        password: "",
-        confirmPassword: ""
-      }
-    }
-  )
-  const { errors, isSubmitting } = formState
+  const {
+    errors,
+    handleSubmit,
+    handleSubmitData,
+    isSubmitting,
+    register,
+    setValue,
+    watch
+  } = useNewPassword({ emailToken: params.emailToken, router })
 
   const codeValue = watch("code")
 
@@ -50,24 +29,9 @@ export default function NewPassword({
     setValue("code", justNumbers(codeValue))
   }, [codeValue])
 
-  const handleSubmitData: SubmitHandler<IHandleSubmit> = useCallback(
-    async data => {
-      await useAuth({
-        data,
-        url: "/recover-password/new-password",
-        method: "POST",
-        returnData: false,
-        pageToRedirect: "/login"
-      })
-
-      reset()
-    },
-    []
-  )
-
-  //  Adicionar no useAuth a opcao redirectIfFails
-  //  Ver se tem como melhorar a funcao useAuth
-  //  Dar uma olhada no JSX das paginas
+  useEffect(() => {
+    void useNewPasswordValidateToken({ params })
+  }, [])
 
   return (
     <>

@@ -1,44 +1,18 @@
 "use client"
 
 import Header from "@/components/Header"
-import { useAuth } from "@/hooks"
-import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { forgotPasswordCheckEmailSchema } from "@/utils"
-import { useCallback } from "react"
-import type { SubmitHandler } from "react-hook-form"
+import { useForgotPassword } from "@/hooks"
+import { useEffect } from "react"
 import { useRouter } from "next/navigation"
-
-interface IHandleSubmit {
-  email: string
-}
 
 export default function ForgotPassword(): JSX.Element {
   const router = useRouter()
+  const { errors, handleSubmit, handleSubmitData, isSubmitting, register } =
+    useForgotPassword(router)
 
-  const { register, handleSubmit, formState, reset } = useForm({
-    mode: "all",
-    resolver: yupResolver(forgotPasswordCheckEmailSchema),
-    defaultValues: {
-      email: ""
-    }
-  })
-  const { errors, isSubmitting } = formState
-
-  const handleSubmitData: SubmitHandler<IHandleSubmit> = useCallback(
-    async data => {
-      const response = await useAuth({
-        data,
-        url: "/recover-password/check-email",
-        method: "POST",
-        returnData: true
-      })
-      localStorage.setItem("code", JSON.stringify(response?.content))
-      reset()
-      router.push(`/password/new-password/${response?.content?.emailToken}`)
-    },
-    []
-  )
+  useEffect(() => {
+    console.log("test: ", handleSubmitData)
+  }, [handleSubmitData])
 
   return (
     <>
@@ -68,7 +42,7 @@ export default function ForgotPassword(): JSX.Element {
                 {...register("email")}
               />
               {errors.email !== undefined && (
-                <p className="text-red-500 w-full md:w-[600px] mt-1 text-xs md:text-base">
+                <p className="text-red-500 w-full md:w-full mt-1 text-xs md:text-base">
                   {errors?.email?.message}
                 </p>
               )}
