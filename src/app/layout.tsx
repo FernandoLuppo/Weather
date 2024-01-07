@@ -2,6 +2,7 @@ import React from "react"
 import type { ReactNode } from "react"
 import type { Metadata } from "next"
 import "./globals.css"
+import { AuthProvider } from "@/context"
 
 interface HomeLayoutProps {
   children: ReactNode
@@ -15,7 +16,9 @@ export const metadata: Metadata = {
 export default function HomeLayout({ children }: HomeLayoutProps): JSX.Element {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <AuthProvider>
+        <body>{children}</body>
+      </AuthProvider>
     </html>
   )
 }

@@ -1,9 +1,11 @@
+"use client"
+
 import { useCallback, useState } from "react"
 import { AuthContext } from "./AuthContext"
 import { useCookies } from "@/hooks"
 import { redirect } from "next/navigation"
 
-export const AuthContextProvider = ({
+export const AuthProvider = ({
   children
 }: {
   children: JSX.Element
