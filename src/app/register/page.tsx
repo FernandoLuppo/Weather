@@ -1,46 +1,14 @@
 "use client"
 
 import Link from "next/link"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { useForm } from "react-hook-form"
-import type { SubmitHandler } from "react-hook-form"
-import { useCallback } from "react"
 import Header from "@/components/Header"
-import { useAuth } from "@/hooks"
-import { registerSchema } from "@/utils"
-
-interface IHandleSubmit {
-  name: string
-  email: string
-  password: string
-  confirmPassword: string
-}
+import { useRegisterForm } from "@/hooks"
+import { useRouter } from "next/navigation"
 
 export default function Login(): JSX.Element {
-  const { register, handleSubmit, formState, reset } = useForm({
-    mode: "all",
-    resolver: yupResolver(registerSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: ""
-    }
-  })
-  const { errors, isSubmitting } = formState
-
-  const handleSubmitData: SubmitHandler<IHandleSubmit> = useCallback(
-    async data => {
-      await useAuth({
-        data,
-        method: "post",
-        pageToRedirect: "/",
-        url: "/user/register"
-      })
-      reset()
-    },
-    []
-  )
+  const router = useRouter()
+  const { errors, handleSubmit, handleSubmitData, isSubmitting, register } =
+    useRegisterForm(router)
 
   return (
     <>
@@ -53,7 +21,7 @@ export default function Login(): JSX.Element {
 
         <form
           onSubmit={handleSubmit(handleSubmitData)}
-          className="max-md:w-full flex flex-col gap-10 px-10 md:px-0 "
+          className="w-full md:w-[576px] flex flex-col gap-10 px-10 md:px-0 "
         >
           <div className="flex flex-col">
             <label htmlFor="" className="text-textWhite text-2xl md:text-3xl">
@@ -64,10 +32,10 @@ export default function Login(): JSX.Element {
               type="text"
               autoFocus
               placeholder="Name: Your Name"
-              className="h-12 w-full md:w-[600px] rounded-md px-3 text-base md:text-xl bg-gray-100 shadow-md"
+              className="h-12 w-full rounded-md px-3 text-base md:text-xl bg-gray-100 shadow-md"
             />
             {errors.name !== undefined && (
-              <p className="text-red-500 w-full md:w-[600px] mt-1 text-xs md:text-base">
+              <p className="text-red-500 w-full mt-1 text-xs md:text-base">
                 {errors?.name?.message}
               </p>
             )}
@@ -81,10 +49,10 @@ export default function Login(): JSX.Element {
               {...register("email")}
               type="email"
               placeholder="E-mail: your_email@gmail.com"
-              className="h-12 w-full md:w-[600px] rounded-md px-3 text-base md:text-xl bg-gray-100 shadow-md"
+              className="h-12 w-full rounded-md px-3 text-base md:text-xl bg-gray-100 shadow-md"
             />
             {errors.email !== undefined && (
-              <p className="text-red-500 w-full md:w-[600px] mt-1 text-xs md:text-base">
+              <p className="text-red-500 w-full mt-1 text-xs md:text-base">
                 {errors?.email?.message}
               </p>
             )}
@@ -98,10 +66,10 @@ export default function Login(): JSX.Element {
               {...register("password")}
               type="password"
               placeholder="Password: ********"
-              className="h-12 w-full md:w-[600px] rounded-md px-3 text-base md:text-xl bg-gray-100 shadow-md"
+              className="h-12 w-full rounded-md px-3 text-base md:text-xl bg-gray-100 shadow-md"
             />
             {errors.password !== undefined && (
-              <p className="text-red-500 w-full md:w-[600px] mt-1 text-xs md:text-base">
+              <p className="text-red-500 w-full mt-1 text-xs md:text-base">
                 {errors?.password?.message}
               </p>
             )}
@@ -115,10 +83,10 @@ export default function Login(): JSX.Element {
               {...register("confirmPassword")}
               type="password"
               placeholder="Password: ********"
-              className="h-12 w-full md:w-[600px] rounded-md px-3 text-base md:text-xl bg-gray-100 shadow-md"
+              className="h-12 w-full rounded-md px-3 text-base md:text-xl bg-gray-100 shadow-md"
             />
             {errors.confirmPassword !== undefined && (
-              <p className="text-red-500 w-full md:w-[600px] mt-1 text-xs md:text-base">
+              <p className="text-red-500 w-full mt-1 text-xs md:text-base">
                 {errors?.confirmPassword?.message}
               </p>
             )}
