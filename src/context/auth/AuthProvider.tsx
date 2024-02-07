@@ -22,8 +22,6 @@ export const AuthProvider = ({
     setRefreshToken(refresh)
   }, [accessToken, refreshToken])
 
-  // const newCookies = () => {}
-
   return (
     <AuthContext.Provider value={{ checkUserCredentials }}>
       {children}

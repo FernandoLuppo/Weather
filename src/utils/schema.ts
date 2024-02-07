@@ -77,3 +77,14 @@ export const forgotPasswordNewPasswordSchema = yup.object().shape({
     )
     .oneOf([yup.ref("password")], "Passwords must match")
 })
+export const userInfosSchema = yup.object().shape({
+  name: yup
+    .string()
+    .required("Name field is required.")
+    .min(3, "Name field needs more than 3 characters."),
+  email: yup
+    .string()
+    .required("Email field is required.")
+    .trim()
+    .email("Email field must contain a valid email.")
+})
