@@ -1,9 +1,9 @@
+"use client"
+import HomeTemplate from "@/templates/home/HomeTemplate"
+import type { NextPage } from "next"
 
-
-export default function Home(): JSX.Element {
-  return (
-    <div>
-
-    </div>
-  )
+const App: NextPage = () => {
+  return <HomeTemplate />
 }
+
+export default App

@@ -1,49 +1,29 @@
-import type { IAuthValidation, IResult, IUseAuth } from "@/types"
-import { redirect } from "next/navigation"
+import type { IResult } from "@/types"
 
-const authValidation = ({
-  pageToRedirect,
-  returnData,
-  method
-}: Omit<IUseAuth, "data" | "url">): IAuthValidation => {
-  const pageToRedirectValidation =
-    pageToRedirect !== null && pageToRedirect !== undefined && method === "GET"
-  const returnDataValidation = returnData === true && returnData !== undefined
-
-  return { pageToRedirectValidation, returnDataValidation }
+interface IUseAuth {
+  url: string
+  method: string
+  body?: any
 }
 
 export const useAuth = async ({
-  data,
   url,
   method,
-  pageToRedirect,
-  returnData
-}: IUseAuth): Promise<IResult | undefined> => {
-  console.log("Teste")
+  body
+}: IUseAuth): Promise<IResult> => {
+  console.log("test: ", body)
 
   const response = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
     method: method.toUpperCase(),
+    body: JSON.stringify(body),
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
     },
-    body: JSON.stringify(data)
-  })
-  const res: IResult = await response.json()
-
-  if (res.isError) {
-    alert(res.error)
-    console.log(res.error)
-    return
-  }
-
-  const { pageToRedirectValidation, returnDataValidation } = authValidation({
-    pageToRedirect,
-    returnData,
-    method
+    credentials: "include",
+    cache: "no-store"
   })
 
-  if (pageToRedirectValidation) redirect((pageToRedirect ?? "").toLowerCase())
-
-  if (returnDataValidation) return res
+  const data: IResult = await response.json()
+  return data
 }

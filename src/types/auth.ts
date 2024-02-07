@@ -1,12 +1,6 @@
-export interface IUseAuth {
-  data: any
-  url: string
-  method: string
-  pageToRedirect?: string | null
-  returnData?: boolean
-}
+import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 
-export interface IAuthValidation {
-  returnDataValidation: boolean
-  pageToRedirectValidation: boolean
+export interface ISubmitData {
+  route: AppRouterInstance
+  reset: () => void
 }
