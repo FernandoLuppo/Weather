@@ -1,7 +1,12 @@
-export const useNewCookies = async (data: string): Promise<void> => {
+import { useAuth } from ".."
+import type { IResult } from "@/types"
+
+export const useNewCookies = async (
+  data: string
+): Promise<IResult | unknown> => {
   if (data === "jwt expired") {
     try {
-      await fetch(process.env.NEXT_PUBLIC_API_URL + "/token/new-tokens")
+      return await useAuth({ url: "/token/new-tokens", method: "GET" })
     } catch (error) {
       console.log("Cookie Error: ", error)
     }

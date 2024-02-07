@@ -1,0 +1,5 @@
+export * from "./home/HomeTemplate"
+export * from "./login/LoginTemplate"
+export * from "./password"
+export * from "./register/RegisterTemplate"
+export * from "./user/UserInfosTemplate"
