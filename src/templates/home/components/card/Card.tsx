@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect } from "react"
 import { chosenIcon } from "../../utils"
 import { WeatherContext } from "@/context"
 import type { NextPage } from "next"
